@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,26 +16,46 @@
         <div class="login-container">
             <div class="login-header">
                 <a href="index.html" class="logo">
-                    <img src="logo.png" alt="GYM Logo" class="logo-placeholder">
+                    <img > <!--lOGO DEL GYM-->
                 </a>
                 <h1>CREA TU <span>CUENTA</span></h1>
                 <p>Regístrate para comenzar tu entrenamiento personalizado</p>
             </div>
             
-            <form class="login-form" id="registerForm">
+            <form class="login-form" id="registerForm" method="POST" action="validar_registro.php">
                 <div class="form-group">
-                    <label for="name">Nombre completo</label>
+                    <label for="firstName">Nombre</label>
                     <div class="input-with-icon">
                         <i class="fas fa-user"></i>
-                        <input type="text" id="name" placeholder="Tu nombre completo" required>
+                        <input type="text" id="firstName" name="firstName" placeholder="Tu nombre" required>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="lastName">Apellido</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="lastName" name="lastName" placeholder="Tu apellido" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Correo electrónico</label>
                     <div class="input-with-icon">
                         <i class="fas fa-envelope"></i>
-                        <input type="email" id="email" placeholder="tu@email.com" required>
+                        <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+                        <?php 
+                        if (isset($_SESSION['email_error'])) { ?>
+                        <div class="error" ><?php echo $_SESSION['email_error']; unset($_SESSION['email_error']); ?></div>
+                        <?php } ?>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Teléfono</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-phone"></i>
+                        <input type="tel" id="phone" name="phone" placeholder="Tu número de teléfono" required>
                     </div>
                 </div>
                 
@@ -39,7 +63,7 @@
                     <label for="password">Contraseña</label>
                     <div class="input-with-icon">
                         <i class="fas fa-lock"></i>
-                        <input type="password" id="password" placeholder="Crea una contraseña segura" required>
+                        <input type="password" id="password" name="password" placeholder="Crea una contraseña segura" required>
                         <i class="fas fa-eye-slash toggle-password" id="togglePassword"></i>
                     </div>
                     <div class="password-strength">
@@ -57,7 +81,7 @@
                     <label for="confirmPassword">Confirmar contraseña</label>
                     <div class="input-with-icon">
                         <i class="fas fa-lock"></i>
-                        <input type="password" id="confirmPassword" placeholder="Repite tu contraseña" required>
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Repite tu contraseña" required>
                     </div>
                 </div>
                 
@@ -73,7 +97,7 @@
             </form>
             
             <div class="register-link">
-                ¿Ya tienes una cuenta? <a href="login.html">Inicia sesión</a>
+                ¿Ya tienes una cuenta? <a href="login.php">Inicia sesión</a>
             </div>
         </div>
         
@@ -165,16 +189,31 @@
                     return;
                 }
                 
+                this.submit();
+                
+                // Phone validation
+                /*
+                const phone = document.getElementById('phone').value;
+                const phoneRegex = /^[0-9]{9,15}$/; // Simple validation for phone numbers
+                
+                if (!phoneRegex.test(phone)) {
+                    alert('Por favor, introduce un número de teléfono válido');
+                    return;
+                }
+                
                 // Here you would typically send the data to your server
                 console.log('Registration attempt:', {
-                    name: document.getElementById('name').value,
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    username: document.getElementById('username').value,
                     email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
                     password: password
                 });
                 
                 // For demo purposes, show success message
                 alert('¡Registro exitoso! Ahora puedes iniciar sesión.');
-                window.location.href = 'login.html';
+                window.location.href = 'login.html'; */
             });
         });
     </script>

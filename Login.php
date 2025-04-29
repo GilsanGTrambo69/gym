@@ -1,3 +1,7 @@
+<?php
+session_start();
+include ("validar_login.php");
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,8 +14,8 @@
         @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
 
         :root {
-          --primary-color: #ff6600;
-          --primary-hover: #ff8533;
+          --primary-color: #22c55e;
+          --primary-hover: #22c55e;
           --dark-bg: #111111;
           --darker-bg: #0a0a0a;
           --light-text: #ffffff;
@@ -257,7 +261,7 @@
         /* Image Side */
         .login-image {
           flex: 1.5;
-          background-image: url("img/hero/hero-1.jpg");
+          background-image: url("assets/img/background_picture_1.jpg");
           background-size: cover;
           background-position: center;
           position: relative;
@@ -358,18 +362,18 @@
         <div class="login-container">
             <div class="login-header">
                 <a href="index.html" class="logo">
-                    <img src="logo.png" alt="GYM Logo" class="logo-placeholder">
+                    <img > <!--Logo del GYM-->
                 </a>
                 <h1>ACCEDE A TU <span>CUENTA</span></h1>
                 <p>Inicia sesión para acceder a tu entrenamiento personalizado</p>
             </div>
             
-            <form class="login-form" id="loginForm">
+            <form class="login-form" id="loginForm" method="post" action="">
                 <div class="form-group">
                     <label for="email">Email</label>
                     <div class="input-with-icon">
                         <i class="fas fa-envelope"></i>
-                        <input type="email" id="email" placeholder="tu@email.com" required>
+                        <input type="email" id="email" name="email" placeholder="tu@email.com" required>
                     </div>
                 </div>
                 
@@ -377,17 +381,19 @@
                     <label for="password">Contraseña</label>
                     <div class="input-with-icon">
                         <i class="fas fa-lock"></i>
-                        <input type="password" id="password" placeholder="Tu contraseña" required>
+                        <input type="password" id="password" name="password" placeholder="Tu contraseña" required>
                         <i class="fas fa-eye-slash toggle-password" id="togglePassword"></i>
                     </div>
                 </div>
+                <?php
+                    if(isset($_SESSION['msg']))
+                    {
+                        echo $_SESSION['msg'];
+                        unset($_SESSION['msg']);
+                    }?>
                 
                 <div class="form-options">
-                    <div class="remember-me">
-                        <input type="checkbox" id="remember">
-                        <label for="remember">Recordarme</label>
-                    </div>
-                    <a href="forgot-password.html" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                    <a href="forgot-password.php" class="forgot-password">¿Olvidaste tu contraseña?</a>
                 </div>
                 
                 <button type="submit" class="login-button">INICIAR SESIÓN</button>
@@ -395,7 +401,7 @@
             </form>
             
             <div class="register-link">
-                ¿No tienes una cuenta? <a href="register.html">Regístrate ahora</a>
+                ¿No tienes una cuenta? <a href="register.php">Regístrate ahora</a>
             </div>
         </div>
         
@@ -428,6 +434,7 @@
             });
             
             // Form submission handler
+            /*
             document.getElementById('loginForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 
@@ -439,7 +446,7 @@
                 
                 // For demo purposes, show success message
                 alert('Inicio de sesión exitoso!');
-            });
+            });*/
         });
     </script>
 </body>

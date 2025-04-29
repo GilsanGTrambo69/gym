@@ -1,8 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
 
 :root {
-  --primary-color: #ff6600;
-  --primary-hover: #ff8533;
+  --primary-color: #22c55e;
+  --primary-hover: #22c55e;
   --dark-bg: #111111;
   --darker-bg: #0a0a0a;
   --light-text: #ffffff;
@@ -256,7 +256,7 @@ body {
 /* Image Side */
 .login-image {
   flex: 1.5;
-  background-image: url("img/hero/hero-1.jpg");
+  background-image: url("assets/img/background_picture_1.jpg");
   background-size: cover;
   background-position: center;
   position: relative;
@@ -431,7 +431,9 @@ body {
   color: var(--gray-text);
   margin-bottom: 20px;
 }
-
+.error{
+  color: red;
+}
 /* Responsive Design */
 @media (min-width: 992px) {
   .login-image {
