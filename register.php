@@ -8,7 +8,7 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - GYM</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -23,6 +23,18 @@ session_start();
             </div>
             
             <form class="login-form" id="registerForm" method="POST" action="validar_registro.php">
+                <div class="form-group">
+                    <label for="firstName">Numero de documento</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="number" id="document" name="document" placeholder="Tu numero de documento" required>
+                        <?php
+                        if (isset($_SESSION['doc_error'])) { ?>
+                        <div class="error" ><?php echo $_SESSION['doc_error']; unset($_SESSION['doc_error']); ?></div>
+                        <?php } ?>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label for="firstName">Nombre</label>
                     <div class="input-with-icon">
@@ -56,6 +68,10 @@ session_start();
                     <div class="input-with-icon">
                         <i class="fas fa-phone"></i>
                         <input type="tel" id="phone" name="phone" placeholder="Tu número de teléfono" required>
+                        <?php
+                        if (isset($_SESSION['tel_error'])) { ?>
+                        <div class="error" ><?php echo $_SESSION['tel_error']; unset($_SESSION['tel_error']); ?></div>
+                        <?php } ?>
                     </div>
                 </div>
                 
