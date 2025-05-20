@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+if(!isset($_SESSION['documento_usuario'])) {
+    header('Location: ../index.php');
+    exit();
+}
 //echo "hola";
 
 $mail = $_SESSION['correo_usuario'];

@@ -38,6 +38,7 @@
     });
 
     // View User Details
+
     $('.action-btn.view').on('click', function() {
         // In a real application, you would fetch user details from the server
         // For demo purposes, we'll just show an alert
@@ -68,6 +69,7 @@
     });
 
     // Confirm Delete User
+    /*
     $('#confirmDeleteUser').on('click', function() {
         // Here you would typically make an AJAX call to delete the user
         // For demo purposes, we'll just close the modal and show a success message
@@ -91,7 +93,7 @@
                 $(this).remove();
             });
         }, 500);
-    });
+    });*/
 
     // User Form Submit
     $('#userForm').on('submit', function(e) {
@@ -116,9 +118,9 @@
         const message = isEdit ? 
             `Usuario "${firstName} ${lastName}" actualizado correctamente.` : 
             `Nuevo usuario "${firstName} ${lastName}" añadido correctamente.`;
-        
+        /*
         alert(message);
-        
+        */
         // For demo purposes, let's update the table
         // In a real application, you would refresh the data or update the DOM based on server response
         if (!isEdit) {
@@ -164,7 +166,7 @@
             });
         }
     });
-
+    /*
     // Filter functionality (demo only)
     $('.users-filter .search-btn').on('click', function() {
         const searchTerm = $('#searchUser').val();
@@ -182,13 +184,14 @@
         alert('Exportando datos de usuarios...');
     });
 
-    // Pagination functionality (demo only)
+    // Pagination functionality (demo only) 
+    /*
     $('.pagination-btn').not(':disabled').on('click', function() {
         $('.pagination-btn').removeClass('active');
         $(this).addClass('active');
         
         // In a real app, you would load the corresponding page of data
         alert('Cargando página ' + $(this).text() + ' de usuarios...');
-    });
+    });*/
 
 })(window.jQuery);

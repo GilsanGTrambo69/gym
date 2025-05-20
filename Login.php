@@ -370,10 +370,10 @@ include ("validar_login.php");
             
             <form class="login-form" id="loginForm" method="post" action="">
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="doc">Email</label>
                     <div class="input-with-icon">
                         <i class="fas fa-envelope"></i>
-                        <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+                        <input type="number" id="doc" name="doc" placeholder="Tu numero de documento" required>
                     </div>
                 </div>
                 

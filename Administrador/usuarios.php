@@ -1,3 +1,45 @@
+<?php
+session_start();
+
+if(!isset($_SESSION['documento_usuario'])) {
+    header('Location: ../index.php');
+    exit();
+}
+
+include '../assets/conexion.php';
+
+$rows = 0;
+$limit = 10; // Número de resultados por página
+
+
+$records = $conexion->query("SELECT * FROM usuarios WHERE id_rol_usuario = 1");
+
+$nr_of_rows = $records->num_rows;
+
+$pages = ceil($nr_of_rows / $limit);
+
+if(isset($_GET['page-nr'])) {
+    $page = $_GET['page-nr'];
+
+    $start = $page * $limit;
+} 
+
+
+$query = "
+    SELECT u.documento_usuario, u.documento_usuario, u.nombre_usuario, u.apellido_usuario,
+           u.correo_usuario, u.telefono_usuario,
+           m.estado_pago, m.fecha_proximo_pago, m.tipo_pago
+    FROM usuarios u
+    LEFT JOIN mensualidad m ON u.documento_usuario = m.id_usuario_pago
+    WHERE u.id_rol_usuario = 1 limit $rows, $limit
+";
+
+$result = mysqli_query($conexion, $query);
+if (!$result) {
+    die("Error en la consulta: " . mysqli_error($conexion));
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -129,11 +171,21 @@
                         <option value="annual">Anual</option>
                     </select>
                 </div>
+
+                <div class="filter-group">
+                    <label for="countRows">Mostrar:</label>
+                    <select id="countRows" class="admin-select">
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="40">40</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
                 
                 <div class="filter-group search-group">
                     <label for="searchUser">Buscar:</label>
                     <div class="search-input-wrapper">
-                        <input type="text" id="searchUser" class="admin-input" placeholder="Documento, nombre o correo...">
+                        <input type="text" id="buscador" name="buscador" class="admin-input" placeholder="Documento, nombre o correo..." >
                         <button class="search-btn"><i class="fa-solid fa-search"></i></button>
                     </div>
                 </div>
@@ -151,138 +203,49 @@
                             <th>Teléfono</th>
                             <th>Estado de Pago</th>
                             <th>Próximo Pago</th>
+                            <th>Tipo de pago</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>1098765432</td>
-                            <td>Ana</td>
-                            <td>Martínez</td>
-                            <td>ana.martinez@email.com</td>
-                            <td>601-234-5678</td>
-                            <td><span class="status-badge active">Al día</span></td>
-                            <td>15/06/2025</td>
-                            <td>
-                                <div class="table-actions">
-                                    <button class="action-btn view" title="Ver detalles"><i class="fa-solid fa-eye"></i></button>
-                                    <button class="action-btn edit" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <button class="action-btn delete" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1087654321</td>
-                            <td>Carlos</td>
-                            <td>Rodríguez</td>
-                            <td>carlos.rodriguez@email.com</td>
-                            <td>602-345-6789</td>
-                            <td><span class="status-badge pending">Pendiente</span></td>
-                            <td>05/06/2025</td>
-                            <td>
-                                <div class="table-actions">
-                                    <button class="action-btn view" title="Ver detalles"><i class="fa-solid fa-eye"></i></button>
-                                    <button class="action-btn edit" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <button class="action-btn delete" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1076543210</td>
-                            <td>Laura</td>
-                            <td>Gómez</td>
-                            <td>laura.gomez@email.com</td>
-                            <td>603-456-7890</td>
-                            <td><span class="status-badge expired">Vencido</span></td>
-                            <td>01/05/2025</td>
-                            <td>
-                                <div class="table-actions">
-                                    <button class="action-btn view" title="Ver detalles"><i class="fa-solid fa-eye"></i></button>
-                                    <button class="action-btn edit" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <button class="action-btn delete" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1065432109</td>
-                            <td>Pedro</td>
-                            <td>Sánchez</td>
-                            <td>pedro.sanchez@email.com</td>
-                            <td>604-567-8901</td>
-                            <td><span class="status-badge active">Al día</span></td>
-                            <td>20/06/2025</td>
-                            <td>
-                                <div class="table-actions">
-                                    <button class="action-btn view" title="Ver detalles"><i class="fa-solid fa-eye"></i></button>
-                                    <button class="action-btn edit" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <button class="action-btn delete" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1054321098</td>
-                            <td>María</td>
-                            <td>López</td>
-                            <td>maria.lopez@email.com</td>
-                            <td>605-678-9012</td>
-                            <td><span class="status-badge active">Al día</span></td>
-                            <td>25/06/2025</td>
-                            <td>
-                                <div class="table-actions">
-                                    <button class="action-btn view" title="Ver detalles"><i class="fa-solid fa-eye"></i></button>
-                                    <button class="action-btn edit" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <button class="action-btn delete" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1043210987</td>
-                            <td>Javier</td>
-                            <td>Fernández</td>
-                            <td>javier.fernandez@email.com</td>
-                            <td>606-789-0123</td>
-                            <td><span class="status-badge pending">Pendiente</span></td>
-                            <td>10/06/2025</td>
-                            <td>
-                                <div class="table-actions">
-                                    <button class="action-btn view" title="Ver detalles"><i class="fa-solid fa-eye"></i></button>
-                                    <button class="action-btn edit" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <button class="action-btn delete" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1032109876</td>
-                            <td>Sofía</td>
-                            <td>Díaz</td>
-                            <td>sofia.diaz@email.com</td>
-                            <td>607-890-1234</td>
-                            <td><span class="status-badge expired">Vencido</span></td>
-                            <td>28/04/2025</td>
-                            <td>
-                                <div class="table-actions">
-                                    <button class="action-btn view" title="Ver detalles"><i class="fa-solid fa-eye"></i></button>
-                                    <button class="action-btn edit" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <button class="action-btn delete" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1021098765</td>
-                            <td>Miguel</td>
-                            <td>Torres</td>
-                            <td>miguel.torres@email.com</td>
-                            <td>608-901-2345</td>
-                            <td><span class="status-badge active">Al día</span></td>
-                            <td>30/06/2025</td>
-                            <td>
-                                <div class="table-actions">
-                                    <button class="action-btn view" title="Ver detalles"><i class="fa-solid fa-eye"></i></button>
-                                    <button class="action-btn edit" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <button class="action-btn delete" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
-                                </div>
-                            </td>
-                        </tr>
+                    <tbody id="resultado">
+
+                    <?php
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo "<tr>";
+                            echo "<td>" . $row['documento_usuario'] . "</td>";
+                            echo "<td>" . $row['nombre_usuario'] . "</td>";
+                            echo "<td>" . $row['apellido_usuario'] . "</td>";
+                            echo "<td>" . $row['correo_usuario'] . "</td>";
+                            echo "<td>" . $row['telefono_usuario'] . "</td>";
+
+                            // Estado de pago (puede ser NULL si no hay mensualidad aún)
+                            if ($row['estado_pago'] === null) {
+                                echo '<td><span class="status-badge expired">Sin registro</span></td>';
+                            } elseif ($row['estado_pago'] == 1) {
+                                echo '<td><span class="status-badge active">Al día</span></td>';
+                            } elseif ($row['estado_pago'] == 0) {
+                                echo '<td><span class="status-badge pending">Pendiente</span></td>';
+                            } else {
+                                echo '<td><span class="status-badge expired">Vencido</span></td>';
+                            }
+
+                            // Fecha próximo pago (puede ser NULL también)
+                            echo "<td>" . ($row['fecha_proximo_pago'] ? date('d/m/Y', strtotime($row['fecha_proximo_pago'])) : '-') . "</td>";
+                            // Tipo de pago (puede ser NULL también)
+                            echo "<td>" . ($row['tipo_pago'] ? $row['tipo_pago'] : '-') . "</td>";
+
+                            // Acciones
+                            echo "<td>
+                                    <div class='table-actions'>
+                                        <button class='action-btn view' title='Ver detalles'><i class='fa-solid fa-eye'></i></button>
+                                        <button class='action-btn edit' title='Editar'><i class='fa-solid fa-pen-to-square'></i></button>
+                                        <button class='action-btn delete' title='Eliminar'><i class='fa-solid fa-trash'></i></button>
+                                    </div>
+                                </td>";
+                            echo "</tr>";
+                        }
+
+                    ?>
                     </tbody>
                 </table>
             </div>
@@ -290,14 +253,51 @@
             <!-- Pagination -->
             <div class="admin-pagination">
                 <div class="pagination-info">
-                    <span>Mostrando 1-8 de 24 usuarios</span>
+                    <?php
+                        // Mostrar el número total de usuarios
+                        echo "<span>Mostrando " . ($rows + 1) . "-" . ($rows + $limit) . " de " . $nr_of_rows . " usuarios</span>";
+                    ?>
                 </div>
                 <div class="pagination-controls">
-                    <button class="pagination-btn" disabled><i class="fa-solid fa-chevron-left"></i></button>
+                        <?php 
+                        if (isset($_GET['page-nr']) && $_GET['page-nr'] > 1) {
+                            ?>
+                            <a href="?page-nr=<?php echo $_GET['page-nr'] - 1 ?>"><button class="pagination-btn" ><i class="fa-solid fa-chevron-left"></i></button></a>
+                            <?php
+                        } else {
+                            ?>
+                            <button class="pagination-btn" ><i class="fa-solid fa-chevron-left"></i></button>
+                            <?php
+                        }
+
+                        ?>
+
+                    
+                    
                     <button class="pagination-btn active">1</button>
                     <button class="pagination-btn">2</button>
                     <button class="pagination-btn">3</button>
-                    <button class="pagination-btn"><i class="fa-solid fa-chevron-right"></i></button>
+                    
+                    <?php
+                    if(!isset($_GET['page-nr'])) {
+                        ?>
+                        <a href="?page-nr=2"><button class="pagination-btn"><i class="fa-solid fa-chevron-right"></i></button></a>
+                        <?php
+                    } else {
+                        if ($_GET['page-nr'] >= $pages) {
+                            ?>
+                            <a href=""><button class="pagination-btn"><i class="fa-solid fa-chevron-right"></i></button></a>
+                            <?php
+                        } else {
+                            ?>
+                            <a href="?page-nr=<?php echo $_GET['page-nr'] + 1 ?>"><button class="pagination-btn"><i class="fa-solid fa-chevron-right"></i></button></a>
+                            <?php
+                    }
+                }
+                    
+                    ?>
+
+
                 </div>
             </div>
         </div>
@@ -388,9 +388,12 @@
     </div>
 
     <!-- JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min."></script>
     <script src="../js/admin.js"></script>
-    <script src="../js/usuarios.js"></script>
+    <script src="../js/usuarios.ja"></script>
+    <script src='./js/buscar_usuarios.js'></script>
+    <script>
+    </script>
 </body>
 
 </html>

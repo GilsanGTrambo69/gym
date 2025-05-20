@@ -10,25 +10,25 @@ if (!$conexion){
 
 mysqli_set_charset($conexion, "utf8");
 
-if (!empty($_POST['email']) && !empty($_POST['password'])){
-    $correo = $_POST['email'];
+if (!empty($_POST['doc']) && !empty($_POST['password'])){
+    $documento = $_POST['doc'];
     $password = $_POST['password'];
     $contraseña = md5($password);
 
-    $correo = mysqli_real_escape_string($conexion, $correo);
+    $documento = mysqli_real_escape_string($conexion, $documento);
     $contraseña = mysqli_real_escape_string($conexion, $contraseña);
 
-    $query = "SELECT * FROM usuarios WHERE correo_usuario = '$correo' AND contraseña = '$contraseña'";
+    $query = "SELECT * FROM usuarios WHERE documento_usuario = '$documento' AND contraseña = '$contraseña'";
     
     if($execute_query = mysqli_query($conexion, $query)) {
         if ($data = mysqli_fetch_assoc($execute_query)) {
-            $mail_sesion = $data['correo_usuario'];
+            $doc_sesion = $data['documento_usuario'];
             $rol_sesion = $data['id_rol_usuario'];
-            $_SESSION["correo_usuario"] = $mail_sesion;
+            $_SESSION["documento_usuario"] = $doc_sesion;
             
             switch($rol_sesion) {
                 case 1; header('Location: Usuario/inicio.php'); exit;
-                case 2; header('Location: Administrador/inicio.php'); exit;
+                case 2; header('Location: Administrador/usuarios.php'); exit;
                 case 3; header('Location: Entrenador/inicio.php'); exit;
             }
         } else {
